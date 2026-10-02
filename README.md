@@ -3,76 +3,78 @@
 ![Looker Studio](https://img.shields.io/badge/Looker_Studio-4285F4?style=for-the-badge&logo=google&logoColor=white)
 ![Google BigQuery](https://img.shields.io/badge/Google_BigQuery-669DF6?style=for-the-badge&logo=google-cloud&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-F29111?style=for-the-badge&logo=postgresql&logoColor=white)
 
-> **Proyek Analisis Data End-to-End** yang mengubah lebih dari 500.000 data *listing* mentah Amazon India menjadi wawasan strategis yang dapat ditindaklanjuti untuk tim Pricing, Merchandising, dan Marketing.
+> **Proyek Analisis Data End-to-End** yang memproses data katalog raksasa Amazon menjadi wawasan strategis untuk mengoptimalkan anggaran promosi, menghentikan perang harga yang tidak efektif, dan memetakan segmentasi produk bagi tim Pricing, Merchandising, dan Marketing[cite: 4, 16].
 
-*(Ganti teks ini dengan link menuju Dashboard Looker Studio interaktif Anda)*  
-👉 **[Lihat Live Dashboard di Looker Studio](https://lookerstudio.google.com/...)**
-
----
-
-## 📌 1. Business Problem & Objective
-Jutaan produk beredar di Amazon dengan variasi harga dan diskon yang sangat beragam. Seringkali penjual dan tim strategi platform berasumsi bahwa **"diskon besar sama dengan produk laris"** dan **"harga mahal berarti rating tinggi"**. Promosi sering dilakukan tanpa dasar data yang kuat.
-
-**Tujuan Proyek:**
-1. Membuktikan secara statistik apakah strategi diskon benar-benar berkorelasi dengan traksi pasar (popularitas).
-2. Mengklasifikasikan produk ke dalam **4 Segmen Utama** untuk mengoptimalkan anggaran promosi (Ads) dan manajemen katalog.
+### 🔗 Quick Links
+*   📈 **[Live Dashboard - Looker Studio](MASUKKAN_LINK_LOOKER_STUDIO_ANDA_DI_SINI)**
+*   📄 **[Executive Summary Report (PDF)](reports/Amazon_Products_Analysis_Report.pdf)**
+*   📓 **[Statistical Analysis Notebook (Colab)](notebooks/Amazon_Products_Final_Analysis.ipynb)**
+*   🗄️ **[Original Dataset (Kaggle)](https://www.kaggle.com/datasets/lokeshparab/amazon-products-dataset/data?select=Amazon-Products.csv)**
 
 ---
 
-## 📊 2. Key Business Insights
+## 📌 1. Konteks Bisnis & Pernyataan Masalah
 
-### Mitos Diskon Terbantahkan
-Melalui uji korelasi *Spearman* yang distratifikasi per kategori dan dikoreksi dengan *Benjamini-Hochberg FDR*, ditemukan bahwa **diskon tinggi tidak menjamin popularitas produk secara universal**. 
-* Pada kategori `home_kitchen`, diskon memang mendorong interaksi (rho = 0.413).
-* Namun pada kategori `electronics`, hubungannya justru **negatif** (rho = -0.141). Pembeli elektronik lebih mengutamakan spesifikasi dan merek dibandingkan potongan harga.
+Amazon memiliki jutaan *listing* produk lintas kategori dengan variasi harga, diskon, dan tingkat kepuasan pelanggan yang sangat tajam[cite: 5]. Dalam ekosistem yang sekompetitif ini, penjual dan tim strategi platform seringkali mengambil keputusan berdasarkan insting atau asumsi yang bias, seperti:
+*   *"Memberikan diskon besar otomatis akan membuat produk laris manis."*
+*   *"Produk dengan ulasan terbanyak pasti memiliki kualitas (rating) yang paling bagus."*
 
-### Matriks Segmentasi Produk
-Alih-alih menganalisis produk secara individual, ratusan ribu produk dipecah ke dalam 4 kuadran strategis berdasarkan *Rating* (Kualitas) dan *Review Count* (Popularitas) relatif terhadap median masing-masing kategori:
+Praktik promosi yang dilakukan tanpa dasar data yang kuat ini seringkali berujung pada **inefisiensi anggaran iklan (*Ad Spend*)** dan **perang harga (*price war*)** yang pada akhirnya hanya menggerus margin keuntungan tanpa memberikan dampak loyalitas pelanggan yang berarti.
 
-![Distribusi Segmen Produk](assets/segmentation_chart.png)  
-*(Ganti placeholder gambar di atas dengan screenshot grafik batang segmentasi produk Anda)*
-
-1. 🌟 **Best Seller (26.7%):** Produk unggulan dengan rating dan popularitas di atas rata-rata.
-2. 💎 **Hidden Gem (25.4%):** Kualitas terbukti tinggi (Rating > Median), namun kurang terekspos (Review < Median).
-3. ⚠️ **Overhyped (23.4%):** Produk sangat populer namun banyak mendapat keluhan (Rating < Median).
-4. 🗑️ **Risky (24.5%):** Produk dengan performa buruk secara kualitas maupun traksi.
+**Tujuan Analisis:**
+1. Menguji kebenaran asumsi pasar melalui uji statistik: Apakah strategi diskon benar-benar mendorong traksi popularitas di semua kategori?[cite: 5]
+2. Membangun kerangka segmentasi produk untuk mengidentifikasi produk berpotensi tinggi yang kurang terekspos (*Hidden Gems*) dan memisahkan produk berisiko tinggi (*Overhyped*)[cite: 6].
 
 ---
 
-## 💡 3. Actionable Recommendations
+## ⚙️ 2. Metodologi & Alur Proses Data
 
-*   **Bagi Tim Marketing:** Stop membakar anggaran iklan untuk produk yang sudah *Best Seller* atau *Risky*. Alihkan sebagian besar anggaran Ads untuk mempromosikan produk **Hidden Gem**. Kualitas mereka sudah tervalidasi oleh pembeli awal; mereka hanya butuh lebih banyak eksposur.
-*   **Bagi Tim Pricing:** Hentikan strategi "Diskon Pukul Rata". Untuk kategori *Electronics*, bersainglah di aspek fitur dan garansi, bukan banting harga. 
-*   **Bagi Tim Merchandising:** Segera lakukan audit pada 23.4% produk di segmen **Overhyped**. Karena produk ini sering dilihat pengunjung, rating yang rendah dapat merusak citra *marketplace* secara keseluruhan.
+Proyek ini tidak sekadar membuat visualisasi, melainkan membangun *data pipeline* tingkat produksi yang memastikan tata kelola dan validitas data sebelum analisis dilakukan[cite: 19].
 
----
-
-## ⚙️ 4. Data Architecture & Pipeline
-
-Proyek ini menggunakan arsitektur ETL terstruktur untuk memastikan *data governance* yang baik sebelum divisualisasikan:
-
-1.  **Extract & Load:** Mengimpor dataset raw (551k+ baris) ke dalam **Google BigQuery**.
-2.  **Transform (SQL):** 
-    *   *Staging Layer:* Pembersihan *Null*, *casting* tipe data numerik, ekstraksi `ASIN` sebagai *primary key*.
-    *   *Data Quality Layer:* Deteksi duplikat, anomali harga (harga = 0), dan identifikasi outlier.
-    *   *Mart Layer:* Pembuatan tabel agregasi khusus (seperti `mart_category_summary` dan `mart_segment_distribution`) untuk performa dashboard yang ringan.
-3.  **Statistical Analysis (Python):** Menggunakan `Google Colab` dengan *SciPy* dan *Statsmodels* untuk menjalankan uji inferensial (Spearman, Kruskal-Wallis, Mann-Whitney U Test) dari data yang ditarik via BigQuery API.
-4.  **Visualize:** Menghubungkan *Mart Layer* ke **Looker Studio** untuk *dashboard* interaktif.
+1.  **Data Extraction & Profiling (BigQuery SQL):** Mengimpor dataset mentah dan melakukan pengukuran anomali awal. Ditemukan 6.0% data kehilangan informasi rating, 2.9% baris duplikat, dan 0.5% anomali harga (harga = 0)[cite: 8].
+2.  **Data Cleaning & Deduplication (BigQuery SQL):** 
+    *   Mengekstraksi `ASIN` dari URL sebagai pengidentifikasi unik produk[cite: 8].
+    *   Menghapus 336 baris duplikat dan menandai anomali harga, menyisakan **11.149 produk unik** siap pakai[cite: 8, 14].
+3.  **Feature Engineering (BigQuery SQL):** Menciptakan metrik bisnis baru seperti `discount_pct` (persentase diskon) dan membagi harga ke dalam kelompok `price_bucket` (Budget, Mid, Premium) untuk tiap sub-kategori[cite: 8].
+4.  **Exploratory Data Analysis & Statistical Inference (Python):** Memindahkan agregasi data ke Google Colab. Melakukan uji korelasi *Spearman* yang distratifikasi per kategori produk dan dikoreksi dengan metode *Benjamini-Hochberg False Discovery Rate (FDR)* guna menghindari bias konklusi lintas kategori[cite: 11, 21].
+5.  **Actionable Dashboarding (Looker Studio):** Menghubungkan *Mart Layer* BigQuery ke Looker Studio untuk memantau metrik secara interaktif[cite: 19, 21].
 
 ---
 
-## 📂 5. Repository Structure
+## 📊 3. Temuan Utama & Wawasan Bisnis
 
-```text
-├── assets/
-│   ├── dashboard_screenshot.png       # Tampilan Looker Studio
-│   └── segmentation_chart.png         # Grafik segmentasi Python
-├── notebooks/
-│   └── Amazon_Products_Final_Analysis.ipynb  # Script EDA & Uji Statistik (SciPy)
-├── reports/
-│   ├── Amazon_Products_Analysis_Report.pdf   # Laporan Eksekutif Lengkap
-│   └── business_insight_summary.txt          # Ringkasan insight teks
-├── sql/
-│   └── amazon_products_pipeline.sql   # Script ETL BigQuery (Staging s/d Mart)
-└── README.md
+### A. Mitos Diskon Terbantahkan (The Discount Illusion)
+Banyak penjual membakar uang melalui diskon besar demi mendapatkan ulasan terbanyak. Namun, uji statistik membuktikan bahwa **korelasi antara diskon dan popularitas tidak berlaku seragam di semua kategori**[cite: 12].
+*   Di kategori `home_kitchen` dan `appliances`, diskon terbukti signifikan mendorong popularitas (rho = 0.413 dan 0.327)[cite: 11]. Diskon agresif di kategori ini terbukti efektif[cite: 15].
+*   Sebaliknya, pada kategori `electronics`, hubungannya berbalik menjadi **negatif** (rho = -0.141)[cite: 12]. Pembeli barang elektronik lebih sensitif terhadap spesifikasi teknis dan kepercayaan merek dibandingkan sekadar potongan harga[cite: 15].
+
+### B. Matriks Kualitas vs. Popularitas (Product Quadrants)
+Membandingkan Rating (Kualitas) dan Jumlah Ulasan (Engagement/Popularitas) terhadap nilai tengah (median) dari masing-masing kategori[cite: 13]. Pemetaan ini menghasilkan 4 kuadran produk:
+
+1.  🌟 **Best Seller (26.7%):** Bintang pasar. Rating memuaskan dan sangat populer[cite: 13, 14].
+2.  💎 **Hidden Gem (25.4%):** Kualitas sangat tinggi (Rating > Median) namun jarang dibeli/diulas (Review < Median). Ini adalah tambang emas yang belum tergali[cite: 13].
+3.  ⚠️ **Overhyped (23.4%):** Sangat populer dan sering dibeli, namun kualitas aslinya mengecewakan pembeli (Rating < Median)[cite: 13, 14].
+4.  🗑️ **Risky (24.5%):** Kualitas buruk dan sepi peminat[cite: 13].
+
+---
+
+## 💡 4. Rekomendasi Strategis Berbasis Data
+
+*   **Untuk Tim Marketing (Optimasi Ads):** Hentikan alokasi iklan untuk produk di kuadran *Best Seller* (sudah memiliki *traffic* organik yang kuat) dan kuadran *Risky*[cite: 16]. Pindahkan 70% anggaran *Campaign* untuk memberikan eksposur maksimal pada produk **Hidden Gem**. Mereka sudah terbukti memuaskan pembeli awal, hanya butuh dorongan visibilitas[cite: 16].
+*   **Untuk Tim Pricing (Strategi Harga):** Tinggalkan metode "Diskon Pukul Rata". Sesuaikan agresivitas diskon berdasarkan sensitivitas kategori. Fokuskan strategi promosi diskon pada *Home Kitchen*, dan gunakan strategi *Value-Add* (seperti garansi ekstra atau *bundling*) untuk kategori *Electronics*[cite: 16].
+*   **Untuk Tim Merchandising & Quality Control:** Prioritaskan investigasi dan audit segera pada 23.4% produk di segmen **Overhyped**[cite: 14, 16]. Karena produk ini sering muncul di pencarian teratas, akumulasi ulasan yang buruk dapat merusak tingkat kepercayaan konsumen terhadap keseluruhan platform[cite: 15, 17].
+
+---
+
+## 📈 5. Proyeksi Dampak Bisnis (Expected Impact)
+
+Penerapan rekomendasi dari analisis ini diproyeksikan akan memberikan dampak langsung pada fundamental bisnis platform:
+1.  **Efisiensi Anggaran (Cost Optimization):** Menghindari pembakaran uang pada diskon yang tidak relevan di kategori *Electronics*, serta menghentikan kebocoran *Ad Spend* pada produk berkualitas rendah[cite: 17].
+2.  **Pertumbuhan Margin Organik (Revenue Growth):** Menaikkan status ratusan produk *Hidden Gem* menjadi *Best Seller* baru tanpa harus mengorbankan margin melalui diskon harga[cite: 17].
+3.  **Manajemen Reputasi Jangka Panjang:** Mencegah penurunan retensi pelanggan dengan mendeteksi dini produk *Overhyped* sebelum ulasan negatif merusak metrik kepuasan pembeli (*Customer Satisfaction*) platform[cite: 15, 17].
+
+---
+
+*Dataset provided by Lokesh Parab via Kaggle.*
